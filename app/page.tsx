@@ -43,14 +43,6 @@ export default async function Home({
     if (agent.role.displayName.toLowerCase().includes(query)) {
       return true;
     }
-    
-    const hasMatchingAbility = agent.abilities.some(ability => {
-      const matches = ability.displayName.toLowerCase().includes(query) || 
-                     ability.description.toLowerCase().includes(query);
-      return matches;
-    });
-    
-    if (hasMatchingAbility) return true;
 
     return false;
   });
