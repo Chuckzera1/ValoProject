@@ -1,5 +1,4 @@
 import { AgentCardList } from "@/components/agent-card-list";
-import { AgentData } from "@/types/agent";
 import { fetchAgents } from "@/lib/agents";
 import SearchInput from "./components/SearchInput";
 import { Search } from "lucide-react";
@@ -14,17 +13,17 @@ export default async function Home({
   searchParams: { search?: string };
 }) {
   const agents = await fetchAgents();
-  const searchQuery = searchParams?.search || '';
+  const searchQuery = searchParams?.search || "";
 
-  const filteredAgents = agents.filter(agent => {
+  const filteredAgents = agents.filter((agent) => {
     if (!searchQuery.trim()) return true;
 
     const query = searchQuery.toLowerCase();
-    
+
     if (agent.displayName.toLowerCase().includes(query)) {
       return true;
     }
-    
+
     if (agent.role.displayName.toLowerCase().includes(query)) {
       return true;
     }
@@ -51,10 +50,12 @@ export default async function Home({
           <div className="bg-valorant-black/40 border border-valorant-gray/30 rounded-full p-4 mb-4">
             <Search className="w-8 h-8 text-valorant-red/70" />
           </div>
-          <h2 className="text-xl font-bold text-valorant-white mb-2">Nenhum agente encontrado</h2>
+          <h2 className="text-xl font-bold text-valorant-white mb-2">
+            Nenhum agente encontrado
+          </h2>
           <p className="text-valorant-white/70 max-w-md">
-            Não encontramos nenhum agente correspondente a &quot;{searchQuery}&quot;. 
-            Tente buscar por nome, papel ou habilidade.
+            Não encontramos nenhum agente correspondente a &quot;{searchQuery}
+            &quot;. Tente buscar por nome, papel ou habilidade.
           </p>
         </div>
       ) : (

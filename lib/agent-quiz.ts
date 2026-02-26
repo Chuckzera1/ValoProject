@@ -14,11 +14,46 @@ export const STYLE_TAGS = [
 
 export type StyleTag = (typeof STYLE_TAGS)[number];
 
-// Role displayNames as returned by API with pt-BR
-const ROLES = ["Controlador", "Duelista", "Iniciador", "Sentinela"] as const;
+// developerName values from the API (stable) – use for type-safe map keys
+export const AGENT_NAMES = [
+  "Jett",
+  "Phoenix",
+  "Sage",
+  "Sova",
+  "Viper",
+  "Cypher",
+  "Reyna",
+  "Killjoy",
+  "Breach",
+  "Omen",
+  "Raze",
+  "Skye",
+  "Yoru",
+  "Astra",
+  "KAY/O",
+  "Chamber",
+  "Neon",
+  "Fade",
+  "Harbor",
+  "Gekko",
+  "Deadlock",
+  "Iso",
+  "Clove",
+] as const;
 
-// Map agent developerName (API field, stable) -> style tags
-export const AGENT_STYLE_MAP: Record<string, StyleTag[]> = {
+export type AgentName = (typeof AGENT_NAMES)[number];
+
+function isAgentName(s: string): s is AgentName {
+  return (AGENT_NAMES as readonly string[]).includes(s);
+}
+
+/** Style tags for an agent; empty array if agent not in map or API returns unknown name. */
+function getAgentStyles(agent: AgentData): StyleTag[] {
+  return isAgentName(agent.developerName) ? AGENT_STYLE_MAP[agent.developerName] ?? [] : [];
+}
+
+// Map agent developerName (API field) -> style tags
+export const AGENT_STYLE_MAP: Partial<Record<AgentName, StyleTag[]>> = {
   Jett: ["Agressivo", "Versátil"],
   Phoenix: ["Agressivo"],
   Sage: ["Suporte", "Defensivo"],
@@ -46,12 +81,43 @@ export const AGENT_STYLE_MAP: Record<string, StyleTag[]> = {
 
 export type QuestionId = "role" | "engage" | "utility" | "position" | "distance";
 
-export type QuizAnswers = Partial<Record<QuestionId, string>>;
+// Role displayNames as returned by API (pt-BR)
+export const ROLE_DISPLAY_NAMES = ["Controlador", "Duelista", "Iniciador", "Sentinela"] as const;
+export type RoleDisplayName = (typeof ROLE_DISPLAY_NAMES)[number];
+
+function isRoleDisplayName(s: string): s is RoleDisplayName {
+  return (ROLE_DISPLAY_NAMES as readonly string[]).includes(s);
+}
+
+// All option ids used in QUIZ_QUESTIONS – keeps answers type-safe
+export const OPTION_IDS = [
+  "controller",
+  "duelist",
+  "initiator",
+  "sentinel",
+  "any",
+  "aggressive",
+  "support",
+  "balanced",
+  "recon",
+  "area",
+  "flash",
+  "traps",
+  "team",
+  "solo",
+  "depends",
+  "short",
+  "long",
+  "any_dist",
+] as const;
+export type OptionId = (typeof OPTION_IDS)[number];
+
+export type QuizAnswers = Partial<Record<QuestionId, OptionId>>;
 
 export interface QuizOption {
-  id: string;
+  id: OptionId;
   label: string;
-  roles: string[];
+  roles: RoleDisplayName[];
   styleTags: StyleTag[];
 }
 
@@ -126,6 +192,7 @@ export function scoreAgents(agents: AgentData[], answers: QuizAnswers): AgentDat
 
   for (const agent of agents) {
     let score = 0;
+    const agentStyleSet = new Set(getAgentStyles(agent));
 
     for (const q of QUIZ_QUESTIONS) {
       const chosenId = answers[q.id];
@@ -134,13 +201,16 @@ export function scoreAgents(agents: AgentData[], answers: QuizAnswers): AgentDat
       const option = q.options.find((o) => o.id === chosenId);
       if (!option) continue;
 
-      if (option.roles.length > 0 && option.roles.includes(agent.role.displayName)) {
+      if (
+        option.roles.length > 0 &&
+        isRoleDisplayName(agent.role.displayName) &&
+        option.roles.includes(agent.role.displayName)
+      ) {
         score += ROLE_WEIGHT;
       }
 
-      const agentStyles = AGENT_STYLE_MAP[agent.developerName] ?? [];
       for (const tag of option.styleTags) {
-        if (agentStyles.includes(tag)) score += STYLE_WEIGHT;
+        if (agentStyleSet.has(tag)) score += STYLE_WEIGHT;
       }
     }
 
