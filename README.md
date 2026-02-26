@@ -56,6 +56,43 @@ Este projeto foi desenvolvido em grande parte pelo Cursor AI, um assistente de p
 
 O Cursor AI trabalhou em estreita colaboração com o desenvolvedor humano, fornecendo sugestões de código, implementando funcionalidades e garantindo as melhores práticas de desenvolvimento. Sua contribuição foi fundamental para criar uma aplicação robusta, performática e com uma excelente experiência do usuário.
 
+## 🤖 Revisão Automática de PRs
+
+Este projeto utiliza o **CodeRabbit** para revisão automática de Pull Requests. Cada PR é analisado por IA focando em:
+
+- ✅ Qualidade de código e legibilidade
+- ✅ Boas práticas (TypeScript/React/Next.js)
+- ✅ Possíveis bugs e problemas de segurança
+- ✅ Performance e otimizações
+- ✅ Sugestões de melhorias
+
+### Configuração do CodeRabbit
+
+O CodeRabbit é um GitHub App gratuito que faz reviews automáticos de PRs. Para configurar:
+
+1. Acesse o [CodeRabbit no GitHub Marketplace](https://github.com/marketplace/coderabbitai)
+2. Clique em **Install it for free**
+3. Escolha se deseja instalar para:
+   - **Todos os repositórios** (recomendado para uso pessoal)
+   - **Apenas repositórios selecionados** (escolha este repositório)
+4. Autorize as permissões necessárias
+5. Pronto! O CodeRabbit começará a revisar automaticamente todos os PRs
+
+### Como Funciona
+
+- O CodeRabbit revisa automaticamente cada PR quando é aberto ou atualizado
+- Ele posta comentários inline no código com sugestões
+- Fornece um resumo geral do review no PR
+- É totalmente gratuito para repositórios públicos e privados
+
+### Recursos do Plano Gratuito
+
+- ✅ Reviews automáticos ilimitados
+- ✅ Análise de código com IA
+- ✅ Sugestões de melhorias
+- ✅ Detecção de bugs potenciais
+- ✅ Comentários inline no código
+
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Sinta-se à vontade para usar e modificar conforme necessário.
