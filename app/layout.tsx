@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -24,10 +25,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="border-b border-valorant-gray/30 bg-valorant-black/80 sticky top-0 z-10">
+          <nav className="container mx-auto px-4 py-3 flex gap-6" aria-label="Navegação principal">
+            <Link href="/" className="nav-link">
+              Agentes
+            </Link>
+            <Link href="/descubra-seu-agente" className="nav-link">
+              Descubra seu agente
+            </Link>
+          </nav>
+        </header>
         {children}
       </body>
     </html>

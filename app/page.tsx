@@ -1,27 +1,12 @@
 import { AgentCardList } from "@/components/agent-card-list";
 import { AgentData } from "@/types/agent";
+import { fetchAgents } from "@/lib/agents";
 import SearchInput from "./components/SearchInput";
 import { Search } from "lucide-react";
+import Link from "next/link";
 
-// Remove force-static and add proper dynamic configuration
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
-
-async function fetchAgents(): Promise<AgentData[]> {
-  const apiUrl = process.env.NEXT_PUBLIC_VALO_API_URL;
-  const response = await fetch(
-    `${apiUrl}/agents?language=pt-BR&isPlayableCharacter=true`,
-    { next: { revalidate: 900000 } }
-  );
-
-  if (!response.ok) {
-    console.error("Failed to fetch agents data.");
-    return [];
-  }
-
-  const result = await response.json();
-  return result?.data ?? [];
-}
 
 export default async function Home({
   searchParams,
@@ -50,7 +35,15 @@ export default async function Home({
   return (
     <div className="container mx-auto py-8 px-4">
       <h1 className="heading text-center">VALORANT Agents</h1>
-      
+      <p className="text-center mb-6">
+        <Link
+          href="/descubra-seu-agente"
+          className="text-valorant-red hover:text-valorant-red/90 font-medium underline underline-offset-2"
+        >
+          Descubra qual o seu agente →
+        </Link>
+      </p>
+
       <SearchInput value={searchQuery} />
 
       {filteredAgents.length === 0 ? (
